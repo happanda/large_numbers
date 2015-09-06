@@ -7,7 +7,7 @@
 * LongNumber
 * public methods
 *********************************************************************************/
-LongNumber::LongNumber(const char* strnum) : container(0)
+LongNumber::LongNumber(char const* strnum) : container(0)
 {
     bool hasSign = false;
     bool isStatic = true;
@@ -20,7 +20,7 @@ LongNumber::LongNumber(const char* strnum) : container(0)
         strnum++;
         hasSign = true;
     }
-    const char* iter = strnum;
+    char const* iter = strnum;
     long long curVal = 0;
     int curLength = 0;
     while (*iter != 0)
@@ -66,7 +66,7 @@ LongNumber::~LongNumber()
     container.~NumberContainer();
 }
 
-LongNumber LongNumber::operator +(const LongNumber& other) const
+LongNumber LongNumber::operator +(LongNumber const& other) const
 {
     if (container.isStatic() && other.container.isStatic())
     {
@@ -92,7 +92,7 @@ LongNumber LongNumber::operator +(const LongNumber& other) const
         return LongNumber(add(container, other.container));
 }
 
-LongNumber LongNumber::operator -(const LongNumber& other) const
+LongNumber LongNumber::operator -(LongNumber const& other) const
 {
     if (container.isStatic() && other.container.isStatic())
     {
@@ -124,7 +124,7 @@ LongNumber LongNumber::operator -(const LongNumber& other) const
     }
 }
 
-LongNumber LongNumber::operator *(const LongNumber& other) const
+LongNumber LongNumber::operator *(LongNumber const& other) const
 {
     if (container.isStatic() && other.container.isStatic())
     {
@@ -177,7 +177,7 @@ LongNumber LongNumber::operator *(const LongNumber& other) const
     return LongNumber(resized);
 }
 
-LongNumber LongNumber::operator /(const LongNumber& other) const
+LongNumber LongNumber::operator /(LongNumber const& other) const
 {
     if (other == LongNumber("0"))
         throw ArithmeticException("Division by zero");
@@ -291,7 +291,7 @@ LongNumber LongNumber::operator /(const LongNumber& other) const
     return LongNumber(resized);
 }
 
-bool LongNumber::operator==(const LongNumber& other) const
+bool LongNumber::operator==(LongNumber const& other) const
 {
     if (container.isStatic() && other.container.isStatic())
     {
@@ -309,9 +309,14 @@ bool LongNumber::operator==(const LongNumber& other) const
     return true;
 }
 
-bool LongNumber::operator!=(const LongNumber& other) const
+bool LongNumber::operator!=(LongNumber const& other) const
 {
     return !(*this == other);
+}
+
+int LongNumber::length() const
+{
+    return container.length();
 }
 
 void LongNumber::toString(char* str) const
@@ -329,6 +334,16 @@ void LongNumber::toString(char* str) const
     }
     if (container.hasSign())
         *str = '-';
+}
+
+char LongNumber::getDigit(int position) const
+{
+    return container.getDigit(position);
+}
+
+bool LongNumber::sign() const
+{
+    return container.hasSign();
 }
 
 

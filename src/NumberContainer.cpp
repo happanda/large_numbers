@@ -5,6 +5,16 @@
 * NumberContainer
 * public methods
 *********************************************************************************/
+NumberContainer::NumberContainer(long long value)
+{
+    setStatic(true);
+    if (value <= MAX_STATIC_VALUE && value >= -MAX_STATIC_VALUE)
+    {
+        setSign(value < 0);
+        setValue(value);
+    }
+}
+
 NumberContainer::NumberContainer(bool isStatic, int length)
 {
     setStatic(isStatic);
@@ -12,7 +22,7 @@ NumberContainer::NumberContainer(bool isStatic, int length)
         number.dyn.digits = allocate(length);
 }
 
-NumberContainer::NumberContainer(const NumberContainer& other)
+NumberContainer::NumberContainer(NumberContainer const& other)
 {
     setStatic(other.isStatic());
     setSign(other.hasSign());
@@ -27,7 +37,16 @@ NumberContainer::NumberContainer(const NumberContainer& other)
     }
 }
 
-const NumberContainer& NumberContainer::operator=(const NumberContainer& other)
+NumberContainer::~NumberContainer()
+{
+    if (!isStatic())
+    {
+        delete[] number.dyn.digits;
+        number.dyn.digits = nullptr;
+    }
+}
+
+NumberContainer const& NumberContainer::operator=(NumberContainer const& other)
 {
     if (this == &other)
         return *this;
@@ -45,6 +64,11 @@ const NumberContainer& NumberContainer::operator=(const NumberContainer& other)
             setDigit(i, other.getDigit(i));
     }
     return *this;
+}
+
+bool NumberContainer::isStatic() const
+{
+    return (number.st.stat & 1) == 1;
 }
 
 int NumberContainer::length() const
@@ -152,4 +176,67 @@ void NumberContainer::setDigit(int position, char digit)
         else
             return setHigher(byte, digit);
     }
+}
+
+void NumberContainer::setSign(bool hasSign)
+{
+    if (hasSign)
+        number.st.sign |= 1;
+    else
+        number.st.sign &= 0;
+}
+
+void NumberContainer::flipSign()
+{
+    number.st.sign = !number.st.sign;
+}
+
+bool NumberContainer::hasSign() const
+{
+    return (number.st.sign & 1) == 1;
+}
+
+void NumberContainer::setStatic(bool isStatic)
+{
+    if (isStatic)
+        number.st.stat |= 1;
+    else
+        number.st.stat &= 0;
+}
+
+char NumberContainer::getLower(char byte) const
+{
+    return byte & 0xF;// 0xF == 00001111
+}
+
+char NumberContainer::getHigher(char byte) const
+{
+    return (byte & 0xF0) >> 4;// 0xF0 == 11110000
+}
+
+void NumberContainer::setLower(char* byte, char digit)
+{
+    *byte &= 0xF0;// 0xF0 == 11110000, clear lower 4 bits
+    digit &= 0xF;// 0xF == 00001111, clear higher bits just in case
+    *byte |= digit;// set lower bits
+}
+
+void NumberContainer::setHigher(char* byte, char digit)
+{
+    *byte &= 0xF;// 0xF == 00001111, clear higher 4 bits
+    digit &= 0xF;// 0xF == 00001111, clear higher bits just in case
+    digit = digit << 4;// move lower 4 bits to upper 4 bits
+    *byte |= digit;// set higher bits
+}
+
+char* NumberContainer::allocate(int length)
+{
+    int memLen = sizeof(char) * (length / 2 + (length & 1) + 1);
+    char* mem = new char[memLen];
+    for (int i = 0; i < memLen; i++)
+        mem[i] = 0;
+    mem[memLen - 1] = FINAL_DIGIT;
+    if ((length & 1) == 1)
+        setHigher(&mem[memLen - 2], FINAL_DIGIT);
+    return mem;
 }

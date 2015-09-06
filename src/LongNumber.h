@@ -7,22 +7,22 @@
 class LongNumber
 {
 public:
-    LongNumber(const char* strnum);
+    LongNumber(char const* strnum);
     ~LongNumber();
 
-    int length() const { return container.length(); }
+    int length() const;
     void toString(char* str) const;
 
-    char getDigit(int position) const { return container.getDigit(position); }
-    bool sign() const { return container.hasSign(); }
+    char getDigit(int position) const;
+    bool sign() const;
 
-    LongNumber operator+(const LongNumber& other) const;
-    LongNumber operator-(const LongNumber& other) const;
-    LongNumber operator*(const LongNumber& other) const;
-    LongNumber operator/(const LongNumber& other) const;
+    LongNumber operator+(LongNumber const& other) const;
+    LongNumber operator-(LongNumber const& other) const;
+    LongNumber operator*(LongNumber const& other) const;
+    LongNumber operator/(LongNumber const& other) const;
 
-    bool operator==(const LongNumber& other) const;
-    bool operator!=(const LongNumber& other) const;
+    bool operator==(LongNumber const& other) const;
+    bool operator!=(LongNumber const& other) const;
 
 private:
     NumberContainer container;

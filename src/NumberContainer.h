@@ -5,28 +5,13 @@
 class NumberContainer
 {
 public:
-    NumberContainer(long long value)
-    {
-        setStatic(true);
-        if (value <= MAX_STATIC_VALUE && value >= -MAX_STATIC_VALUE)
-        {
-            setSign(value < 0);
-            setValue(value);
-        }
-    }
+    NumberContainer(long long value);
     NumberContainer(bool isStatic, int length);
-    NumberContainer(const NumberContainer& other);
-    ~NumberContainer()
-    {
-        if (!isStatic())
-        {
-            delete[] number.dyn.digits;
-            number.dyn.digits = 0;
-        }
-    }
-    const NumberContainer& operator=(const NumberContainer& container);
+    NumberContainer(NumberContainer const& other);
+    ~NumberContainer();
+    NumberContainer const& operator=(NumberContainer const& container);
 
-    bool isStatic() const { return (number.st.stat & 1) == 1; }
+    bool isStatic() const;
 
     long long getValue() const;
     void setValue(long long value);
@@ -35,15 +20,9 @@ public:
     char getDigit(int position) const;
     void setDigit(int position, char digit);
 
-    void setSign(bool hasSign)
-    {
-        if (hasSign)
-            number.st.sign |= 1;
-        else
-            number.st.sign &= 0;
-    }
-    void flipSign() { number.st.sign = !number.st.sign; }
-    bool hasSign() const { return (number.st.sign & 1) == 1; }
+    void setSign(bool hasSign);
+    void flipSign();
+    bool hasSign() const;
 
     static const long long MAX_STATIC_VALUE = (LLONG_MAX >> 1);// LLONG_MAX / 2
 
@@ -64,49 +43,14 @@ private:
         } dyn;
     } number;
 
-    void setStatic(bool isStatic)
-    {
-        if (isStatic)
-            number.st.stat |= 1;
-        else
-            number.st.stat &= 0;
-    }
+    void setStatic(bool isStatic);
+    char getLower(char byte) const;
+    char getHigher(char byte) const;
+    void setLower(char* byte, char digit);
+    void setHigher(char* byte, char digit);
+    char* allocate(int length);
 
-    char getLower(char byte) const
-    {
-        return byte & 0xF;// 0xF == 00001111
-    }
-    char getHigher(char byte) const
-    {
-        return (byte & 0xF0) >> 4;// 0xF0 == 11110000
-    }
-    void setLower(char* byte, char digit)
-    {
-        *byte &= 0xF0;// 0xF0 == 11110000, clear lower 4 bits
-        digit &= 0xF;// 0xF == 00001111, clear higher bits just in case
-        *byte |= digit;// set lower bits
-    }
-    void setHigher(char* byte, char digit)
-    {
-        *byte &= 0xF;// 0xF == 00001111, clear higher 4 bits
-        digit &= 0xF;// 0xF == 00001111, clear higher bits just in case
-        digit = digit << 4;// move lower 4 bits to upper 4 bits
-        *byte |= digit;// set higher bits
-    }
-
-    char* allocate(int length)
-    {
-        int memLen = sizeof(char) * (length / 2 + (length & 1) + 1);
-        char* mem = new char[memLen];
-        for (int i = 0; i < memLen; i++)
-            mem[i] = 0;
-        mem[memLen - 1] = FINAL_DIGIT;
-        if ((length & 1) == 1)
-            setHigher(&mem[memLen - 2], FINAL_DIGIT);
-        return mem;
-    }
-
-    static const char FINAL_DIGIT = (char)0xFF;// 11111111
+    static char const FINAL_DIGIT = (char)0xFF;// 11111111
 };
 
 #endif
