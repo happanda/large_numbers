@@ -6,19 +6,19 @@
 class LongNumberException : public std::exception
 {
 public:
-   LongNumberException(const char* message) : std::exception(message) {}
+    LongNumberException(const char* message) : std::exception(message) {}
 };
 
 class FormatException : public LongNumberException
 {
 public:
-   FormatException(const char* message) : LongNumberException(message) {}
+    FormatException(const char* message) : LongNumberException(message) {}
 };
 
 class ArithmeticException : public LongNumberException
 {
 public:
-   ArithmeticException(const char* message) : LongNumberException(message) {}
+    ArithmeticException(const char* message) : LongNumberException(message) {}
 };
 
 #endif

@@ -7,39 +7,39 @@
 class LongNumber
 {
 public:
-   LongNumber(const char* strnum);
-   ~LongNumber();
+    LongNumber(const char* strnum);
+    ~LongNumber();
 
-   int length() const { return container.length(); }
-   void toString (char* str) const;
+    int length() const { return container.length(); }
+    void toString(char* str) const;
 
-   char getDigit(int position) const { return container.getDigit(position); }
-   bool sign() const { return container.hasSign(); }
+    char getDigit(int position) const { return container.getDigit(position); }
+    bool sign() const { return container.hasSign(); }
 
-   LongNumber operator+(const LongNumber& other) const;
-   LongNumber operator-(const LongNumber& other) const;
-   LongNumber operator*(const LongNumber& other) const;
-   LongNumber operator/(const LongNumber& other) const;
+    LongNumber operator+(const LongNumber& other) const;
+    LongNumber operator-(const LongNumber& other) const;
+    LongNumber operator*(const LongNumber& other) const;
+    LongNumber operator/(const LongNumber& other) const;
 
-   bool operator==(const LongNumber& other) const;
-   bool operator!=(const LongNumber& other) const;
+    bool operator==(const LongNumber& other) const;
+    bool operator!=(const LongNumber& other) const;
 
 private:
-   NumberContainer container;
+    NumberContainer container;
 
-   LongNumber(NumberContainer num);
+    LongNumber(NumberContainer num);
 
-   static bool checkAdd(long long num1, long long num2, long long & result);
-   static bool checkMult(long long num1, long long num2, long long & result);
+    static bool checkAdd(long long num1, long long num2, long long & result);
+    static bool checkMult(long long num1, long long num2, long long & result);
 
-   static int compareAbs(const NumberContainer& cont1, const NumberContainer& cont2);
+    static int compareAbs(const NumberContainer& cont1, const NumberContainer& cont2);
 
-   // adds two numbers from containers, result has the sign of left
-   // assumes, both numbers aren't static
-   static NumberContainer add(const NumberContainer& left, const NumberContainer& right);
-   // subtracts right from left, result has the sign of left
-   // assumes left >= right, both are not static
-   static NumberContainer sub(const NumberContainer& left, const NumberContainer& right);
+    // adds two numbers from containers, result has the sign of left
+    // assumes, both numbers aren't static
+    static NumberContainer add(const NumberContainer& left, const NumberContainer& right);
+    // subtracts right from left, result has the sign of left
+    // assumes left >= right, both are not static
+    static NumberContainer sub(const NumberContainer& left, const NumberContainer& right);
 
 };
 

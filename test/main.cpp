@@ -9,11 +9,11 @@
 
 int main(int argc, char** argv)
 {
-   printf("LongNumber size: %d bytes\n", sizeof(LongNumber));
+    printf("LongNumber size: %d bytes\n", sizeof(LongNumber));
 
-   ::testing::InitGoogleTest(&argc, argv);
-   int res = RUN_ALL_TESTS();
-   getchar();
-   return res;
+    ::testing::InitGoogleTest(&argc, argv);
+    int res = RUN_ALL_TESTS();
+    getchar();
+    return res;
 }
 
