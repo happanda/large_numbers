@@ -140,8 +140,8 @@ LongNumber LongNumber::operator *(LongNumber const& other) const
         || other.container.isStatic() && other.container.getValue() == 0)
         return LongNumber(NumberContainer(0));
 
-    int thisLen = container.length();
-    int otherLen = other.container.length();
+    int const thisLen = container.length();
+    int const otherLen = other.container.length();
     // use upper bound of length
     NumberContainer num(false, thisLen + otherLen);
 
@@ -162,7 +162,7 @@ LongNumber LongNumber::operator *(LongNumber const& other) const
     }
     num.setSign(container.hasSign() ^ other.container.hasSign());
 
-    int len = transfered > 0 ? thisLen + otherLen : thisLen + otherLen - 1;
+    int const len = transfered > 0 ? thisLen + otherLen : thisLen + otherLen - 1;
     if (transfered > 0)
     {
         // ok, length equals estimated
@@ -181,7 +181,7 @@ LongNumber LongNumber::operator /(LongNumber const& other) const
 {
     if (other == LongNumber("0"))
         throw ArithmeticException("Division by zero");
-    bool needSign = container.hasSign() ^ other.container.hasSign();
+    bool const needSign = container.hasSign() ^ other.container.hasSign();
     if (container.isStatic() && other.container.isStatic())
     {
         // both numbers are inside long long type, division always inside type
@@ -189,7 +189,7 @@ LongNumber LongNumber::operator /(LongNumber const& other) const
         val *= needSign ? -1 : 1;
         return LongNumber(NumberContainer(val));
     }
-    int comp = compareAbs(container, other.container);
+    int const comp = compareAbs(container, other.container);
     if (comp < 0)
         return LongNumber(NumberContainer(0));
     else if (comp == 0)
@@ -199,10 +199,10 @@ LongNumber LongNumber::operator /(LongNumber const& other) const
         return LongNumber(num);
     }
     // we have to divide here
-    int thisLen = container.length();
-    int otherLen = other.container.length();
+    int const thisLen = container.length();
+    int const otherLen = other.container.length();
     // use upper bound of length
-    int numLen = thisLen - otherLen + 1;
+    int const numLen = thisLen - otherLen + 1;
     int pos = numLen;
     NumberContainer num(false, pos--);
     num.setSign(needSign);
